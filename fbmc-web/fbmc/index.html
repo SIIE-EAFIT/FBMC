@@ -609,6 +609,54 @@ dialog h3{font-family:var(--head);font-weight:700;color:var(--fb-green)}
   .send,.story{padding:30px 24px}
 }
 
+/* ---------- Listas por campos (actor + texto) ---------- */
+.lhead{display:grid;grid-template-columns:var(--wcol,0) minmax(0,1fr) 34px;gap:8px;padding:0 8px 4px 12px;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fb-mute)}
+.lhead.plain{grid-template-columns:28px minmax(0,1fr) 34px}
+.lst{display:grid;gap:8px;margin:2px 0 10px;counter-reset:it}
+.lrow{display:grid;grid-template-columns:var(--wcol,0) minmax(0,1fr) 34px;gap:8px;align-items:start;padding:6px 6px 6px 8px;background:#fff;border:1px solid var(--fb-line);border-left:4px solid var(--c,var(--fb-lime));transition:border-color .15s,box-shadow .15s,background .15s}
+.lrow.plain{grid-template-columns:28px minmax(0,1fr) 34px;border-left-color:var(--fb-lime)}
+.lrow:focus-within{border-color:var(--fb-green);border-left-color:var(--c,var(--fb-green));box-shadow:0 0 0 3px rgba(124,173,62,.18)}
+.lrow.sin{border-left:4px dashed #C99A1A;background:#FFFCF2}
+.lrow .num{display:grid;place-items:center;width:24px;height:24px;margin-top:6px;border-radius:50%;background:var(--fb-tint);color:var(--fb-green);font-size:12px;font-weight:700}
+.lrow .num::before{counter-increment:it;content:counter(it)}
+.who{position:relative;display:flex;align-items:center;gap:8px;height:36px;padding:0 26px 0 10px;background:#F4F7F5;border:1px solid var(--fb-line);min-width:0}
+.who i{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+.who select{appearance:none;-webkit-appearance:none;border:0;background:transparent;font:inherit;font-size:14px;font-weight:700;color:var(--fb-ink);width:100%;min-width:0;cursor:pointer;padding:0;text-overflow:ellipsis}
+.who select:focus{outline:none}
+.who:focus-within{border-color:var(--fb-green)}
+.who::after{content:"";position:absolute;right:10px;top:50%;width:6px;height:6px;border-right:2px solid var(--fb-mute);border-bottom:2px solid var(--fb-mute);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.who.none{background:#FFF6DC;border-color:#EBCF85}
+.who.none i{background:transparent;border:1.5px dashed #B0860F}
+.who.none select{color:#86650A;font-weight:600;font-style:italic}
+.lrow textarea.lt{min-height:36px;height:36px;border:0;box-shadow:none;background:transparent;resize:none;overflow:hidden;padding:7px 4px;font:inherit;font-size:15px;line-height:1.45;width:100%}
+.lrow textarea.lt:focus{outline:none;box-shadow:none}
+.lrow .icon{margin-top:1px}
+.lst-add{display:inline-flex;align-items:center;gap:6px;border:1px dashed var(--fb-edge);background:#fff;color:var(--fb-green);font:inherit;font-size:13.5px;font-weight:700;padding:8px 14px;cursor:pointer}
+.lst-add:hover{border-color:var(--fb-lime);background:var(--fb-tint)}
+.lnote{font-size:12.5px;color:#86650A;margin:-2px 0 10px;display:flex;align-items:center;gap:6px}
+.lnote::before{content:"";width:10px;height:10px;border-radius:50%;border:1.5px dashed #B0860F}
+@media (max-width:560px){
+  .lhead{display:none}
+  .lrow{grid-template-columns:minmax(0,1fr) 34px}
+  .lrow .who{grid-column:1}
+  .lrow textarea.lt{grid-column:1/-1;grid-row:2}
+  .lrow.plain{grid-template-columns:28px minmax(0,1fr) 34px}
+  .lrow.plain textarea.lt{grid-column:auto;grid-row:auto}
+}
+/* Ejemplos públicos (en línea) */
+.exlist{display:grid;gap:8px;margin:12px 0 4px;max-height:52vh;overflow:auto}
+.exitem{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--fb-line);background:#fff;padding:12px 14px;font:inherit;cursor:pointer}
+.exitem:hover{border-color:var(--fb-lime);background:var(--fb-tint)}
+.exitem b{flex:1;color:var(--fb-ink);font-size:15px}
+.exitem span{font-size:12.5px;color:var(--fb-mute);white-space:nowrap}
+
+/* Celular: los documentos originales se muestran como dos botones compactos arriba de los pasos */
+@media (max-width:900px){
+  nav.rail .docs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 4px 12px;padding-bottom:12px;border-bottom:1px solid var(--fb-line)}
+  nav.rail .docs .dt{grid-column:1/-1;margin:0}
+  nav.rail .docs .doc{font-size:12.5px;padding:9px 10px;line-height:1.3}
+}
+
 /* Encabezado: marca a la izquierda, acciones discretas a la derecha */
 .topin{justify-content:space-between}
 .tbtns{margin-left:auto;display:flex;align-items:center;gap:2px;flex-wrap:wrap;justify-content:flex-end}
@@ -874,7 +922,14 @@ function guide(k){return `<p class="q">${G[k].q}</p><details class="guide"><summ
 /* Atajos (máx. 3 ejemplos de la guía) y ayudas con los actores ya escritos */
 function atajos(key){const l=ATAJOS[key]||[];return l.length?`<div class="chips"><span class="glab">Ejemplos:</span>${l.map(([x,p])=>`<button type="button" class="chip" data-ins="${esc(x)}" data-target="p:f.${key}"><svg class="pl" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>${esc(x)}</button>`).join('')}</div>`:''}
 function helpers(key,set){return `<div class="helpers" data-helpers="${key}" data-set="${set}"></div>`}
-function box(k,cls,set,ph,rows){return card(k,cls,(set?helpers(k,set):'')+atajos(k)+ta('f.'+k,ph,rows||6))}
+function box(k,cls,set,ph){return card(k,cls,(set?helpers(k,set):'')+atajos(k)+lst(k,set,ph))}
+/* Lista por campos: cada elemento es una fila (actor o grupo de interés + texto).
+   Se guarda como texto "Nombre: texto" por línea, así el lienzo, el PDF y el resumen siguen igual. */
+const LCOL={necesidades:['Actor','Necesidad'],relaciones:['Grupo de interés','Relación'],canales:['Grupo de interés','Canal'],cocreacion:['Grupo de interés','Valor que se co-crea'],codestruccion:['Actor','Valor que se co-destruye y cómo reducirlo'],
+  actividades:['','Actividad'],alianzas:['','Alianza'],gobernanza:['','Decisión o regla'],reservas:['','Reserva biofísica'],servicios:['','Servicio ecosistémico'],recursosT:['','Recurso tangible'],recursosI:['','Recurso intangible']};
+const LISTS={};
+function lst(k,set,ph){LISTS[k]={set:set||'',ph:ph||''};const c=LCOL[k]||['','Elemento'];
+  return `<div class="lhead ${set?'':'plain'}" style="--wcol:${set?'190px':'0'}" aria-hidden="true"><span>${set?c[0]:''}</span><span>${c[1]}</span><span></span></div><div class="lst" data-list="${k}" style="--wcol:${set?'190px':'0'}"></div><button type="button" class="lst-add" data-act="rowAdd" data-key="${k}"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Agregar ${set?'fila':(c[1]||'elemento').toLowerCase()}</button>`}
 function ta(path,ph,rows){return `<textarea data-path="${path}" rows="${rows||4}" placeholder="${esc(ph||'')}"></textarea>`}
 function card(k,cls,inner){return `<div class="card ${cls||'cream'}" data-box="${k}" id="box-${k}"><h3>${BOXES.find(b=>b[0]===k)[1]}</h3>${guide(k)}${inner}</div>`}
 const STEP_GRP=['Comenzar','Personas','Personas','Valor','Proceso','Proceso','Resultados','Cierre'];
@@ -905,7 +960,7 @@ function build(){
   let h='';
   /* 0 · Datos */
   h+=`<section class="sec" id="sec-datos">${head(0,'Antes de empezar','¿Qué negocio vamos a diseñar, quién lo diseña y para qué momento? La fecha del modelo es clave: todo el lienzo debe responder a esa fecha.')}
-    <div class="exbar"><div class="exico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><p><b>¿Ya tienes un lienzo guardado?</b> Ábrelo (archivo .json) para seguir editándolo donde lo dejaste.</p><button class="btn alt" type="button" data-act="import">Abrir un lienzo guardado</button></div>
+    <div class="exbar"><div class="exico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><p><b>¿Ya tienes un lienzo guardado?</b> Ábrelo (archivo .json) para seguir editándolo donde lo dejaste.${ONLINE?' O mira lienzos de otros equipos para inspirarte.':''}</p>${ONLINE?'<button class="btn" type="button" data-act="examples">Ver ejemplos</button>':''}<button class="btn alt" type="button" data-act="import">Abrir un lienzo guardado</button></div>
     <div class="row">
       <label class="f">Diseñado para (nombre del negocio)<input type="text" data-path="meta.para" placeholder="Ej.: Pedalea Fresco"></label>
       <label class="f">Diseñado por (integrantes o equipo)<input type="text" data-path="meta.por" placeholder="Nombres de quienes diseñan"></label>
@@ -933,7 +988,7 @@ function build(){
       ${card('actores','sage',`<div class="addrow"><input type="text" id="newActor" placeholder="Escribe un actor y pulsa Enter" aria-label="Nuevo actor"><button class="btn" type="button" data-act="addActor">Añadir</button></div>
         <div class="chips"><span class="glab">Ejemplos:</span>${QUICK.map(q=>`<button type="button" class="chip" data-act="quick" data-v="${esc(q)}"><svg class="pl" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>${esc(q)}</button>`).join('')}</div>
         <div class="alist2" id="actorsList"></div>`)}
-      ${box('necesidades','sage','all','Una línea por actor. Ej.: Oficinistas del centro: comer sano sin perder tiempo')}
+      ${box('necesidades','sage','all','Ej.: comer sano sin perder tiempo')}
     </div>
     ${nav(1)}</section>`;
 
@@ -941,16 +996,16 @@ function build(){
   h+=`<section class="sec" id="sec-grupos">${head(2,'Perspectiva Personas · Contexto social','Un actor se convierte en grupo de interés cuando asume un rol en tu negocio. Escribe el rol de cada actor de tu lista; luego define las relaciones y los canales con tus grupos de interés.')}
     ${card('grupos','cream',`<p class="muted small" style="margin:0 0 8px">Al lado de cada actor escribe el grupo de interés concreto o su rol (ej.: Gobierno → DIAN). Separa varios con comas. Déjalo vacío si el actor no es (aún) un grupo de interés.</p><div class="alist2" id="rolesList"></div>`)}
     <div class="grid" style="margin-top:16px">
-      ${box('relaciones','cream','sh','Una línea por grupo de interés. Ej.: Clientes: los conseguimos con degustaciones y los mantenemos con suscripción')}
-      ${box('canales','cream','sh','Una línea por grupo de interés. Ej.: Clientes: WhatsApp, app y entrega en bicicleta')}
+      ${box('relaciones','cream','sh','Ej.: los conseguimos con degustaciones y los mantenemos con suscripción')}
+      ${box('canales','cream','sh','Ej.: WhatsApp, app y entrega en bicicleta')}
     </div>
     ${nav(2)}</section>`;
 
   /* 3 · Valor */
   h+=`<section class="sec" id="sec-valor">${head(3,'Perspectiva Valor · Contexto económico','El valor está en la intersección entre lo que tu empresa crea por dentro (proceso) y todo lo que está afuera (personas). Se co-crea cuando una necesidad se satisface de forma coherente con las creencias y experiencias del grupo de interés, y se co-destruye cuando no.')}
     <div class="grid">
-      ${box('cocreacion','cream','sh','Una línea por grupo de interés, desde su punto de vista. Ej.: Campesinos: ingreso 20 % mayor y estable')}
-      ${box('codestruccion','cream','all','Qué valor podríamos destruir y cómo lo reduciremos. Ej.: Vecinos: ruido al descargar → horarios fijos')}
+      ${box('cocreacion','cream','sh','Desde su punto de vista. Ej.: ingreso 20 % mayor y estable')}
+      ${box('codestruccion','cream','all','Ej.: ruido al descargar → horarios fijos')}
     </div>
     <div class="card cream" data-box="productos" id="box-productos" style="margin-top:16px"><h3>Productos / servicios</h3>${guide('productos')}
       <div class="prow phead"><span>Producto o servicio</span><span>¿Para quién?</span><span>Precio / aporte</span><span></span></div>
@@ -962,17 +1017,17 @@ function build(){
   /* 4 · Proceso */
   h+=`<section class="sec" id="sec-proceso">${head(4,'Perspectiva Proceso · Contexto económico','¿Cómo, dónde y con qué co-crea valor este negocio para alcanzar sus metas? Conecta: cada co-creación necesita actividades; cada actividad transforma recursos; cada recurso tangible viene de una reserva biofísica.')}
     <div class="grid">
-      ${card('recursos','cream',`<div class="sub">Tangibles</div>${atajos('recursosT')}${ta('f.recursosT','Ej.: bicicletas de carga, bodega, 3 repartidores…',3)}<div class="sub">Intangibles</div>${atajos('recursosI')}${ta('f.recursosI','Ej.: saber agroecológico, app, capital semilla…',3)}`)}
-      ${box('actividades','cream','','Una actividad por línea. Ej.: Armar canastas → co-crea “comida fresca” para clientes',5)}
-      ${box('alianzas','cream','','Con quién · qué asegura · tipo de acuerdo. Ej.: Asociación campesina · compra a precio justo · contrato anual',5)}
-      ${box('gobernanza','cream','','¿Quién decide metas, precios y reparto de beneficios? ¿Cómo protegen el propósito? Ej.: Sociedad BIC con consejo consultivo',5)}
+      ${card('recursos','cream',`<div class="sub">Tangibles</div>${atajos('recursosT')}${lst('recursosT','','Ej.: bicicletas de carga')}<div class="sub" style="margin-top:14px">Intangibles</div>${atajos('recursosI')}${lst('recursosI','','Ej.: saber agroecológico')}`)}
+      ${box('actividades','cream','','Ej.: armar canastas → co-crea “comida fresca” para clientes')}
+      ${box('alianzas','cream','','Con quién · qué asegura · acuerdo. Ej.: Asociación campesina · precio justo · contrato anual')}
+      ${box('gobernanza','cream','','Ej.: Sociedad BIC con consejo consultivo')}
     </div>${nav(4)}</section>`;
 
   /* 5 · Naturaleza */
   h+=`<section class="sec" id="sec-naturaleza">${head(5,'Contexto ambiental','Este negocio hace parte de la economía, creada por la sociedad, que a su vez depende total y directamente del ambiente. Estos tres contextos son la fuente de todos los riesgos y oportunidades de cualquier negocio, incluido el tuyo.')}
     <div class="grid">
-      ${box('reservas','sage','','Qué material · de dónde viene · qué pasa con él al final. Ej.: Acero de las bicicletas · reciclado · se reutiliza')}
-      ${box('servicios','sage','','Ej.: Regulación: polinización en las fincas aliadas (la usamos y la protegemos)')}
+      ${box('reservas','sage','','Material · origen · fin de vida. Ej.: acero de las bicicletas · reciclado · se reutiliza')}
+      ${box('servicios','sage','','Ej.: polinización en las fincas aliadas (la usamos y la protegemos)')}
     </div>${nav(5)}</section>`;
 
   /* 6 · Resultados */
@@ -1053,9 +1108,9 @@ function renderHelpers(){
     const key=h.dataset.helpers, sh=h.dataset.set==='sh';
     /* Actores (necesidades, co-destrucción) o grupos de interés (relaciones, canales, co-creación) */
     const list=sh?named().filter(isSH).flatMap(a=>shNames(a).map(n=>({a,n}))):named().map(a=>({a,n:L(a.name)}));
-    const txt=L(state.f[key]).toLowerCase().split('\n').map(s=>s.trim());
+    const rows=ROWS[key]||parseRows(key);
     if(!list.length){h.innerHTML=`<span class="hnone">${sh?'Cuando escribas tus grupos de interés en el paso anterior, aquí aparecerán como ayuda.':'Cuando escribas actores, aquí aparecerán como ayuda.'}</span>`;return;}
-    h.innerHTML=`<span class="glab">${sh?'Tus grupos de interés:':'Tus actores:'}</span>`+list.map(({a,n})=>{const re=new RegExp('^'+reEsc(n.toLowerCase())+'\\s*:');const used=txt.some(l=>re.test(l));const done=txt.some(l=>re.test(l)&&L(l.replace(re,'')));return `<button type="button" class="hchip ${done?'done':''}" ${used?'disabled':''} data-add="${esc(n)}: " data-target="p:f.${key}" title="${used?'Ya hay una línea para '+esc(n):'Agregar una línea para '+esc(n)}"><i style="background:${colorOf(a)}"></i>${esc(n)}</button>`}).join('');
+    h.innerHTML=`<span class="glab">${sh?'Tus grupos de interés:':'Tus actores:'}</span>`+list.map(({a,n})=>{const mine=rows.filter(r=>r.who.toLowerCase()===n.toLowerCase());const done=mine.some(r=>L(r.text));return `<button type="button" class="hchip ${done?'done':''}" data-addrow="${esc(n)}" data-key="${key}" title="Agregar una fila para ${esc(n)}${mine.length?' (ya tiene '+mine.length+')':''}"><i style="background:${colorOf(a)}"></i>${esc(n)}</button>`}).join('');
   });
 }
 function renderProds(){
@@ -1067,6 +1122,7 @@ function renderProds(){
 }
 function renderDyn(){
   const s=STEPS[current].id;
+  document.querySelectorAll('.sec.on [data-list]').forEach(h=>{const k=h.dataset.list;ROWS[k]=parseRows(k);renderList(k);});
   if(s==='actores')renderActors();
   if(s==='grupos')renderRoles();
   if(s==='valor')renderProds();
@@ -1074,7 +1130,64 @@ function renderDyn(){
 function addActor(name){
   name=L(name); if(!name)return;
   if(state.actors.some(a=>L(a.name).toLowerCase()===name.toLowerCase())){toast('“'+name+'” ya está en la lista.');return;}
-  state.actors.push(newActor({name,c:nextColor()}));onChange();renderActors();
+  state.actors.push(newActor({name,c:nextColor()}));onChange();renderActors();refreshVisibleLists();
+}
+
+/* ---------------- Listas por campos ---------------- */
+const ROWS={}, LASTROW={};
+function parseRows(k){
+  const set=LISTS[k]&&LISTS[k].set;
+  const rows=String(state.f[k]??'').split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+    if(set){const m=l.match(/^([^:]{1,60}):\s*(.*)$/);if(m)return {who:m[1].trim(),text:m[2]};}
+    return {who:'',text:l};
+  });
+  return rows.length?rows:[{who:'',text:''}];
+}
+function whoOptions(set){return set==='sh'?named().filter(isSH).flatMap(a=>shNames(a)):named().map(a=>L(a.name))}
+function saveRows(k){
+  state.f[k]=ROWS[k].map(r=>{const t=L(r.text).replace(/\s*\n+\s*/g,' ');return r.who?r.who+': '+t:t}).join('\n');
+  onChange();
+}
+function autoH(t){t.style.height='auto';t.style.height=Math.max(36,t.scrollHeight)+'px'}
+function renderList(k,focusI){
+  const host=document.querySelector(`[data-list="${k}"]`); if(!host)return;
+  const set=LISTS[k].set, rows=ROWS[k]||(ROWS[k]=parseRows(k)), opts=whoOptions(set);
+  const lbl=set==='sh'?'grupo de interés':'actor';
+  host.innerHTML=rows.map((r,i)=>{
+    const ph=i===0?LISTS[k].ph:'Escribe aquí…';
+    const del=`<button type="button" class="icon" data-act="rowDel" data-key="${k}" data-i="${i}" aria-label="Quitar fila ${i+1}" title="Quitar"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`;
+    const txt=`<textarea class="lt" rows="1" data-rt="${k}" data-i="${i}" placeholder="${esc(ph)}" aria-label="${esc((LCOL[k]||['',''])[1]||'Elemento')} ${i+1}">${esc(r.text)}</textarea>`;
+    if(!set)return `<div class="lrow plain"><span class="num" aria-hidden="true"></span>${txt}${del}</div>`;
+    const a=r.who?byName(r.who):null, col=a?colorOf(a):'#9aa0a6';
+    const known=opts.some(o=>o.toLowerCase()===r.who.toLowerCase());
+    const sel=`<label class="who ${r.who?'':'none'}" style="--c:${col}"><i aria-hidden="true"></i><select data-rw="${k}" data-i="${i}" aria-label="${lbl} de la fila ${i+1}"><option value="">Sin ${lbl}</option>${opts.map(o=>`<option value="${esc(o)}"${o.toLowerCase()===r.who.toLowerCase()?' selected':''}>${esc(o)}</option>`).join('')}${r.who&&!known?`<option value="${esc(r.who)}" selected>${esc(r.who)} (no está en tu lista)</option>`:''}</select></label>`;
+    return `<div class="lrow ${r.who?'':'sin'}" style="--c:${r.who?col:'#C99A1A'}">${sel}${txt}${del}</div>`;
+  }).join('');
+  const sinN=set?rows.filter(r=>!r.who&&L(r.text)).length:0;
+  let note=host.nextElementSibling&&host.nextElementSibling.classList.contains('lnote')?host.nextElementSibling:null;
+  if(sinN){if(!note){note=document.createElement('p');note.className='lnote';host.after(note);}note.textContent=sinN===1?`Una fila no tiene ${lbl}: elígelo para que se vea de su color en el lienzo.`:`${sinN} filas no tienen ${lbl}: elígelos para que se vean de su color en el lienzo.`;}
+  else if(note)note.remove();
+  host.querySelectorAll('textarea.lt').forEach(autoH);
+  if(focusI!=null){const t=host.querySelector(`[data-rt][data-i="${focusI}"]`);if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}}
+}
+function refreshVisibleLists(){document.querySelectorAll('.sec.on [data-list]').forEach(h=>{const k=h.dataset.list;ROWS[k]=parseRows(k);renderList(k);});}
+function renderLists(){Object.keys(LISTS).forEach(k=>{ROWS[k]=parseRows(k);renderList(k);});}
+function addRow(k,who,text,after){
+  const rows=ROWS[k]||(ROWS[k]=parseRows(k));
+  let i;
+  const empty=rows.findIndex(r=>!L(r.text)&&(!r.who||r.who===who));
+  if(after==null&&empty>-1){i=empty;rows[i].who=who||rows[i].who;if(text)rows[i].text=text;}
+  else{i=after==null?rows.length:after+1;rows.splice(i,0,{who:who||'',text:text||''});}
+  saveRows(k);renderList(k,i);
+}
+/* Ejemplos de la guía: llenan la fila donde estás; si ya tiene texto, se agregan en una fila nueva para el mismo actor */
+function insertExample(k,text){
+  const rows=ROWS[k]||(ROWS[k]=parseRows(k));
+  const i=LASTROW[k];
+  const r=(i!=null&&rows[i])?rows[i]:null;
+  if(r&&!L(r.text)){r.text=text;saveRows(k);renderList(k,i);return;}
+  if(r){addRow(k,r.who,text,i);return;}
+  addRow(k,'',text);
 }
 
 /* ---------------- Rellenar campos estáticos ---------------- */
@@ -1101,7 +1214,7 @@ function fill(){
     if(i.type==='radio')i.checked=v===i.value; else i.value=i.dataset.num?fmtNum(i.dataset.num,v):(v??'');
   });
   document.querySelectorAll('[data-check]').forEach(c=>{c.checked=!!state.checks[+c.dataset.check]});
-  renderDyn(); refresh();
+  renderLists(); renderDyn(); refresh();
 }
 
 /* ---------------- Refresco general ---------------- */
@@ -1245,22 +1358,76 @@ function go(i){
 /* ---------------- Exportar ---------------- */
 const TIPOS={actual:'Modelo actual',proximo:'Próximo modelo (6 a 18 meses)',vision:'Visión inspiradora (10 a 30 años)'};
 function markdown(){
-  D=derive(); const m=state.meta, out=[];
-  out.push('# Flourishing Business Model Canvas · '+(L(m.para)||'Sin nombre'));
-  out.push('');
-  out.push('| Diseñado para | Diseñado por | Fecha del modelo | Fecha de hoy | Tipo |');
-  out.push('|---|---|---|---|---|');
-  out.push(`| ${L(m.para)} | ${L(m.por)} | ${fmtMonth(m.fecha)} | ${fmtDate(m.hoy)} | ${TIPOS[m.tipo]||''} |`);
-  if(L(m.a1)||L(m.a2)||L(m.a3)){out.push('');out.push(`> Ayudamos a ${L(m.a1)||'…'} a ${L(m.a2)||'…'} mediante ${L(m.a3)||'…'}.`);}
-  [['Propósito',m.proposito],['Problema u oportunidad',m.problema],['ODS',m.ods],['Preguntas pendientes',m.preguntas]].forEach(([t,v])=>{if(L(v)){out.push('');out.push('**'+t+':** '+L(v).replace(/\n/g,' · '));}});
-  const groups=[['Personas',['actores','necesidades','grupos','relaciones','canales']],['Valor',['cocreacion','codestruccion','productos']],['Proceso',['recursos','actividades','alianzas','gobernanza']],['Contexto ambiental',['reservas','servicios']],['Resultados',['metas','beneficios','costos']]];
-  groups.forEach(([g,ks])=>{out.push('');out.push('## '+g);ks.forEach(k=>{out.push('');out.push('### '+BOXES.find(b=>b[0]===k)[1]);const it=D[k];if(!it.length)out.push('_Sin responder_');else it.forEach(x=>out.push('- '+(x.who?'**'+x.who+':** ':'')+L(x.text).replace(/\n+/g,' · ')));});});
-  out.push('');out.push('## Revisión');
-  out.push('');out.push('Lista de coherencia: '+state.checks.filter(Boolean).length+'/'+CHECKS.length);
-  if(L(state.rojos)){out.push('');out.push('**Observaciones:** '+L(state.rojos).replace(/\n/g,' · '));}
+  D=derive(); const m=state.meta, out=[], P=(...x)=>out.push(...x);
+  const cell=v=>L(v).replace(/\|/g,'\\|').replace(/\n+/g,'<br>')||'—';
+  const one=v=>L(v).replace(/\n+/g,' · ');
+  const title=k=>BOXES.find(b=>b[0]===k)[1];
+  const filled=BOXES.filter(b=>D[b[0]].length).length, pct=Math.round(filled/17*100);
+  const A=named();
+  /* Lista agrupada por actor o grupo de interés ("Nombre: texto") */
+  const items=k=>{const it=D[k];if(!it.length)return['_Sin responder._'];
+    const by=new Map();it.forEach(x=>{const w=x.who||'';if(!by.has(w))by.set(w,[]);by.get(w).push(one(x.text));});
+    const r=[];by.forEach((l,w)=>{if(!w)l.forEach(t=>r.push('- '+t));else if(l.length===1)r.push('- **'+w+':** '+l[0]);else{r.push('- **'+w+':**');l.forEach(t=>r.push('  - '+t));}});return r;};
+  const box=k=>{P('','### '+title(k));if(G[k]&&G[k].q)P('','_'+G[k].q+'_');P('',...items(k));};
+
+  P('# Flourishing Business Model Canvas','','## '+(L(m.para)||'Lienzo sin nombre'));
+  if(L(m.a1)||L(m.a2)||L(m.a3))P('','> **Ayudamos a** '+(L(m.a1)||'…')+' **a** '+(L(m.a2)||'…')+' **mediante** '+(L(m.a3)||'…')+'.');
+  P('','| Dato | Detalle |','|---|---|',
+    '| Diseñado para | '+cell(m.para)+' |','| Diseñado por | '+cell(m.por)+' |',
+    '| Tipo de modelo | '+cell(TIPOS[m.tipo])+' |','| Fecha del modelo | '+cell(fmtMonth(m.fecha))+' |',
+    '| Fecha de elaboración | '+cell(fmtDate(m.hoy))+' |','| Avance | '+filled+' de 17 casillas ('+pct+' %) |');
+
+  P('','## 1. Propósito y contexto');
+  const ctx=[['Propósito',m.proposito],['Problema u oportunidad',m.problema],['Objetivos de Desarrollo Sostenible',m.ods]].filter(([,v])=>L(v));
+  if(ctx.length)ctx.forEach(([t,v])=>P('','**'+t+':** '+one(v)));else P('','_Sin responder._');
+
+  P('','## 2. Personas');
+  box('actores');box('necesidades');
+  P('','### Grupos de interés');if(G.grupos&&G.grupos.q)P('','_'+G.grupos.q+'_');
+  const SH=A.filter(isSH);
+  if(SH.length){P('','| Actor | Rol como grupo de interés |','|---|---|');SH.forEach(a=>P('| '+cell(a.name)+' | '+cell(a.role)+' |'));}else P('','_Sin responder._');
+  box('relaciones');box('canales');
+  /* Vista por actor: todo lo que el lienzo dice de cada uno */
+  if(A.length){
+    const rel=['necesidades','relaciones','canales','cocreacion','codestruccion'];
+    const rows=A.map(a=>{const c=rel.map(k=>D[k].filter(x=>x.who&&byName(x.who)===a).map(x=>one(x.text)).join('<br>').replace(/\|/g,'\\|')||'—');return '| **'+cell(a.name)+'**'+(L(a.role)?'<br>_'+cell(a.role)+'_':'')+' | '+c.join(' | ')+' |';});
+    P('','### Vista por actor','','_Lo que el lienzo dice de cada actor (líneas escritas como “Nombre: texto”)._','',
+      '| Actor | Necesidades | Relaciones | Canales | Co-creación | Co-destrucción |','|---|---|---|---|---|---|',...rows);
+  }
+
+  P('','## 3. Valor');
+  box('cocreacion');box('codestruccion');
+  P('','### '+title('productos'));if(G.productos&&G.productos.q)P('','_'+G.productos.q+'_');
+  const pr=state.productos.filter(p=>L(p.n));
+  if(pr.length){P('','| Producto o servicio | Para quién | Precio |','|---|---|---|');pr.forEach(p=>P('| '+cell(p.n)+' | '+cell(p.para)+' | '+cell(p.precio)+' |'));}else P('','_Sin responder._');
+
+  P('','## 4. Proceso');
+  P('','### '+title('recursos'));if(G.recursos&&G.recursos.q)P('','_'+G.recursos.q+'_');
+  if(D.recursos.length)D.recursos.forEach(x=>{P('','**'+x.who+'**');L(x.text).split(/\n+/).filter(t=>L(t)).forEach(t=>P('- '+L(t)));});else P('','_Sin responder._');
+  box('actividades');box('alianzas');box('gobernanza');
+
+  P('','## 5. Naturaleza');
+  box('reservas');box('servicios');
+
+  P('','## 6. Resultados');
+  const tri=p=>['A','S','E'].map(k=>cell(state.f[p+k]));
+  const any=['metas','ben','cos'].some(p=>['A','S','E'].some(k=>L(state.f[p+k])));
+  if(any){P('','| | Ambiental | Social | Económico |','|---|---|---|---|',
+    '| **Metas** | '+tri('metas').join(' | ')+' |','| **Beneficios** | '+tri('ben').join(' | ')+' |','| **Costos** | '+tri('cos').join(' | ')+' |');}
+  else P('','_Sin responder._');
+
+  P('','## 7. Revisión');
+  const ok=state.checks.filter(Boolean).length;
+  P('','### Lista de coherencia ('+ok+' de '+CHECKS.length+')','');CHECKS.forEach((c,i)=>P('- ['+(state.checks[i]?'x':' ')+'] '+c));
+  if(L(state.rojos))P('','### Observaciones','',...L(state.rojos).split(/\n+/).filter(t=>L(t)).map(t=>'- '+L(t)));
   const hy=state.hyp.filter(h=>L(h.h));
-  if(hy.length){out.push('');out.push('| Hipótesis | ¿Cómo validarla? | ¿Con quién y cuándo? |');out.push('|---|---|---|');hy.forEach(h=>out.push(`| ${L(h.h)} | ${L(h.v)} | ${L(h.q)} |`));}
-  out.push('');out.push('---');out.push('_Basado en el Flourishing Business Canvas v2.1 © 2022 Antony Upward (CC BY-ND 4.0) · www.FlourishingBusiness.org_');
+  if(hy.length){P('','### Hipótesis por validar','','| Hipótesis | ¿Cómo validarla? | ¿Con quién y cuándo? |','|---|---|---|');hy.forEach(h=>P('| '+cell(h.h)+' | '+cell(h.v)+' | '+cell(h.q)+' |'));}
+  if(L(m.preguntas))P('','### Preguntas pendientes','',...L(m.preguntas).split(/\n+/).filter(t=>L(t)).map(t=>'- '+L(t)));
+  const miss=BOXES.filter(b=>!D[b[0]].length).map(b=>b[1]);
+  if(miss.length)P('','### Casillas por completar','',miss.join(' · '));
+
+  P('','---','','_Generado el '+new Date().toLocaleDateString('es-CO',{day:'numeric',month:'long',year:'numeric'})+' con la herramienta FBMC del SIIE · Universidad EAFIT._  ',
+    '_Basado en el Flourishing Business Canvas v2.1 © 2022 Antony Upward (CC BY-ND 4.0) · www.FlourishingBusiness.org_');
   return out.join('\n');
 }
 function slug(){const s=(L(state.meta.para)||'lienzo')+'-'+(L(state.meta.por)||'equipo');return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'lienzo'}
@@ -1294,6 +1461,28 @@ function printFallback(){
   setTimeout(()=>{window.print();document.title=t;},300);
 }
 let pdfBusy=false;
+const isTouch=()=>window.matchMedia&&window.matchMedia('(pointer:coarse)').matches;
+function blobDownload(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},4000);}
+/* El PDF ya está generado: en computador se descarga solo; en celular se ofrece compartir o guardar en Archivos
+   (el navegador exige un toque del usuario para abrir el menú de compartir, por eso va en un botón). */
+function pdfReady(blob,name){
+  const file=(typeof File==='function')?new File([blob],name,{type:'application/pdf'}):null;
+  const canShare=!!(file&&navigator.canShare&&navigator.canShare({files:[file]}));
+  const kb=Math.max(1,Math.round(blob.size/1024));
+  const size=kb>1024?(kb/1024).toFixed(1).replace('.',',')+' MB':kb+' KB';
+  const openIt=()=>{const u=URL.createObjectURL(blob);window.open(u,'_blank');setTimeout(()=>URL.revokeObjectURL(u),60000);};
+  if(!isTouch()){
+    blobDownload(blob,name);
+    dialog(`<h3>Tu PDF está listo</h3><p>Se descargó <b>${esc(name)}</b> (${size}) en tu carpeta de descargas.</p>`,
+      [{t:'Abrir el PDF',fn:openIt},{t:'Descargar de nuevo',cls:'alt',fn:()=>blobDownload(blob,name)},{t:'Cerrar',cls:'alt'}]);
+    return;
+  }
+  const acts=[];
+  if(canShare)acts.push({t:'Guardar o compartir',fn:()=>{navigator.share({files:[file],title:'Flourishing Business Model Canvas'}).catch(()=>{});}});
+  acts.push({t:'Descargar',cls:canShare?'alt':'',fn:()=>blobDownload(blob,name)});
+  acts.push({t:'Abrir el PDF',cls:'alt',fn:openIt});
+  dialog(`<h3>Tu PDF está listo</h3><p><b>${esc(name)}</b> · ${size}</p><p>${canShare?'Toca <b>Guardar o compartir</b> y elige <b>Guardar en Archivos</b>, WhatsApp, correo o Drive.':'Toca <b>Descargar</b> para guardarlo en tu celular.'}</p>`,acts);
+}
 async function savePdf(){
   if(pdfBusy)return; pdfBusy=true;
   if($('pv').hidden)openPreview(); else renderPoster();
@@ -1313,8 +1502,7 @@ async function savePdf(){
     const pdf=new jsPDF({orientation:'landscape',unit:'pt',format:[pw,ph],compress:true});
     pdf.addImage(canvas.toDataURL('image/jpeg',0.93),'JPEG',0,0,pw,ph,undefined,'FAST');
     pdf.setProperties({title:'Flourishing Business Model Canvas · '+(L(state.meta.para)||'lienzo'),author:L(state.meta.por),creator:'SIIE · Universidad EAFIT'});
-    pdf.save('FBMC-'+slug()+'.pdf');
-    toast('PDF descargado.');
+    pdfReady(pdf.output('blob'),'FBMC-'+slug()+'.pdf');
   }catch(e){
     toast('No se pudo crear el PDF aquí (¿sin internet?). Se abrirá la impresión: elige “Guardar como PDF”.');
     printFallback();
@@ -1323,6 +1511,23 @@ async function savePdf(){
     btns.forEach(b=>b.removeAttribute('aria-busy'));
     pdfBusy=false;
   }
+}
+
+/* ---------------- Ejemplos públicos (solo online) ---------------- */
+async function openExamples(){
+  dialog('<h3>Ejemplos de otros equipos</h3><p class="muted">Cargando…</p>',[{t:'Cerrar',cls:'alt'}]);
+  let items=[];
+  try{const r=await fetch('/api/ejemplos',{cache:'no-store'});const j=await r.json();items=j.items||[];}catch(e){}
+  if(!$('dlg').open)return;
+  if(!items.length){$('dlgBody').innerHTML='<h3>Ejemplos de otros equipos</h3><p>Aún no hay ejemplos publicados. Vuelve pronto.</p>';return;}
+  $('dlgBody').innerHTML=`<h3>Ejemplos de otros equipos</h3><p>Abre uno para ver cómo lo resolvieron. <b>Reemplaza lo que tengas en este navegador</b>: si ya empezaste, descarga antes tu copia (.json) en el último paso.</p><div class="exlist">${items.map(x=>`<button type="button" class="exitem" data-exid="${x.id}"><b>${esc(x.para||'Lienzo #'+x.id)}</b><span>${x.casillas??'–'}/17 casillas${x.fecha_modelo?' · '+esc(fmtMonth(x.fecha_modelo)):''}</span></button>`).join('')}</div>`;
+  $('dlgBody').querySelectorAll('[data-exid]').forEach(b=>b.addEventListener('click',async()=>{
+    if(BOXES.some(x=>D[x[0]].length)&&!confirm('Esto reemplazará tus respuestas por el ejemplo “'+b.querySelector('b').textContent+'”. ¿Continuar?'))return;
+    b.disabled=true;
+    try{const r=await fetch('/api/ejemplos?id='+b.dataset.exid);const j=await r.json();if(!j.ok)throw new Error(j.error);
+      state=normalize(j.estado);save();fill();go(0);$('dlg').close();toast('Ejemplo abierto: '+(L(state.meta.para)||'lienzo')+'. Usa “Reiniciar” para empezar el tuyo.');}
+    catch(e){b.disabled=false;toast('No se pudo abrir el ejemplo.');}
+  }));
 }
 
 /* ---------------- Enviar a la base de datos (solo online) ---------------- */
@@ -1437,6 +1642,8 @@ function currentLine(el){
 }
 function updateAtajos(only){
   document.querySelectorAll('[data-ins]').forEach(b=>{
+    const lk=b.dataset.target.slice(4);
+    if(LISTS[lk]){const rows=ROWS[lk]||[],r=rows[LASTROW[lk]];const used=!!(r&&r.text.toLowerCase().includes(b.dataset.ins.toLowerCase()));b.disabled=used;b.title=used?'Ya está en esta fila':'Agregar en la fila donde estás';return;}
     const el=targetEl(b.dataset.target); if(!el||(only&&el!==only))return;
     const used=currentLine(el).includes(b.dataset.ins.toLowerCase());
     b.disabled=used; b.title=used?'Ya está en esta línea':'Escribir donde está el cursor';
@@ -1456,14 +1663,18 @@ function wire(){
     const g=e.target.closest('[data-go]'); if(g){go(+g.dataset.go);return;}
     const j=e.target.closest('[data-jump]'); if(j){jump(j.dataset.jump);return;}
     const ad=e.target.closest('[data-add]'); if(ad){addText(ad.dataset.target,ad.dataset.add);return;}
-    const ins=e.target.closest('[data-ins]'); if(ins){insertText(ins.dataset.target,ins.dataset.ins);return;}
+    const ar=e.target.closest('[data-addrow]'); if(ar){addRow(ar.dataset.key,ar.dataset.addrow,'');return;}
+    const ins=e.target.closest('[data-ins]'); if(ins){const lk=ins.dataset.target.slice(4);if(LISTS[lk])insertExample(lk,ins.dataset.ins);else insertText(ins.dataset.target,ins.dataset.ins);return;}
     const b=e.target.closest('[data-act]'); if(!b)return;
     const act=b.dataset.act, a=b.dataset.id?actor(b.dataset.id):null;
     switch(act){
       case 'preview':openPreview();break;
+      case 'rowAdd':{const k=b.dataset.key,rows=ROWS[k]||[];const last=rows[rows.length-1];if(last&&!L(last.text)&&!last.who){renderList(k,rows.length-1);break;}addRow(k,'','',rows.length-1);break;}
+      case 'rowDel':{const k=b.dataset.key,i=+b.dataset.i,rows=ROWS[k];if(!rows)break;rows.splice(i,1);if(!rows.length)rows.push({who:'',text:''});saveRows(k);renderList(k,Math.max(0,i-1));break;}
+      case 'examples':openExamples();break;
       case 'addActor':{const i=$('newActor');addActor(i.value);i.value='';i.focus();break;}
       case 'quick':addActor(b.dataset.v);toast('Añadido: '+b.dataset.v+'. Hazlo más específico.');break;
-      case 'delActor':if(a&&(!L(a.name)||confirm('¿Quitar a “'+L(a.name)+'” de la lista de actores?'))){state.actors=state.actors.filter(x=>x!==a);onChange();renderActors();}break;
+      case 'delActor':if(a&&(!L(a.name)||confirm('¿Quitar a “'+L(a.name)+'” de la lista de actores?'))){state.actors=state.actors.filter(x=>x!==a);onChange();renderActors();refreshVisibleLists();}break;
       case 'addProd':state.productos.push({n:'',para:'',precio:''});onChange();renderProds();{const r=document.querySelectorAll('#prodList [data-pf="n"]');r[r.length-1].focus();}break;
       case 'delProd':state.productos.splice(+b.dataset.i,1);if(!state.productos.length)state.productos.push({n:'',para:'',precio:''});onChange();renderProds();break;
       case 'send':sendOnline();break;
@@ -1479,11 +1690,13 @@ function wire(){
     const t=e.target;
     if(t.dataset.num&&t.dataset.path){setP(t.dataset.path,numInput(t));onChange();return;}
     if(t.dataset.path&&t.type!=='radio'){setP(t.dataset.path,t.value);onChange();return;}
-    if(t.dataset.actor){const a=actor(t.dataset.actor);if(a){if(t.dataset.af==='name')renameLines(a,t.value);if(t.dataset.af==='role')renameRole(a,t.value);a[t.dataset.af]=t.value;if(t.dataset.af==='role'){const r=t.closest('.grow');if(r)r.classList.toggle('sh',isSH(a));}onChange();}return;}
+    if(t.dataset.actor){const a=actor(t.dataset.actor);if(a){if(t.dataset.af==='name')renameLines(a,t.value);if(t.dataset.af==='role')renameRole(a,t.value);a[t.dataset.af]=t.value;if(t.dataset.af==='role'){const r=t.closest('.grow');if(r)r.classList.toggle('sh',isSH(a));}onChange();refreshVisibleLists();}return;}
+    if(t.dataset.rt){const k=t.dataset.rt,r=(ROWS[k]||[])[+t.dataset.i];if(r){if(/\n/.test(t.value))t.value=t.value.replace(/\n+/g,' ');r.text=t.value;autoH(t);saveRows(k);}return;}
     if(t.dataset.prod!==undefined){const p=state.productos[+t.dataset.prod];if(p){p[t.dataset.pf]=t.dataset.num?numInput(t):t.value;onChange();}return;}
   });
   document.addEventListener('change',e=>{
     const t=e.target;
+    if(t.dataset.rw){const k=t.dataset.rw,i=+t.dataset.i,r=(ROWS[k]||[])[i];if(r){r.who=t.value;saveRows(k);renderList(k,i);}return;}
     if(t.type==='radio'&&t.dataset.path){setP(t.dataset.path,t.value);onChange();}
     if(t.dataset.check!==undefined){state.checks[+t.dataset.check]=t.checked;onChange();}
   });
@@ -1492,6 +1705,14 @@ function wire(){
     const r=new FileReader();
     r.onload=()=>{try{const o=JSON.parse(r.result);state=normalize(o.estado||o);save();fill();go(0);toast('Lienzo cargado: '+(L(state.meta.para)||f.name));}catch(err){toast('Ese archivo no es un lienzo válido.');}e.target.value='';};
     r.readAsText(f);
+  });
+  /* Filas: Enter crea otra fila (para el mismo actor); Borrar en una fila vacía la quita */
+  document.addEventListener('focusin',e=>{const t=e.target;if(t.dataset&&(t.dataset.rt||t.dataset.rw)){LASTROW[t.dataset.rt||t.dataset.rw]=+t.dataset.i;updateAtajos();}});
+  document.addEventListener('keydown',e=>{
+    const t=e.target; if(!t.dataset||!t.dataset.rt)return;
+    const k=t.dataset.rt,i=+t.dataset.i,rows=ROWS[k]; if(!rows)return;
+    if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();addRow(k,rows[i].who,'',i);}
+    else if(e.key==='Backspace'&&!t.value&&rows.length>1){e.preventDefault();rows.splice(i,1);saveRows(k);renderList(k,Math.max(0,i-1));}
   });
   ['focusin','mouseup','keyup','select'].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.matches&&e.target.matches('textarea')){touched.add(e.target);updateAtajos(e.target);}}));
   $('newActor').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addActor(e.target.value);e.target.value='';}});
@@ -1513,7 +1734,8 @@ function wire(){
 
 /* ---------------- Inicio ---------------- */
 load(); build(); wire();
-let start=0; try{start=+(store&&store.getItem(KEY+'-sec'))||0;}catch(e){}
+/* Recargar la página conserva el paso; entrar de nuevo (desde la página principal, un enlace o una pestaña nueva) abre el inicio. Las respuestas siempre se conservan. */
+let start=0; try{const nv=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(nv&&nv.type==='reload')start=+(store&&store.getItem(KEY+'-sec'))||0;}catch(e){}
 current=Math.min(Math.max(start,0),STEPS.length-1);
 fill(); go(current);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{if(!$('pv').hidden)fitPoster();});
