@@ -246,6 +246,7 @@ dialog .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
 .pt li b{font-weight:600}
 .pt li.u{text-decoration:underline;text-decoration-color:var(--u);text-decoration-thickness:.17em;text-underline-offset:.2em;text-decoration-skip-ink:none}
 .pt li.u::marker{color:var(--u)}
+.pt li.u b{text-decoration:underline;text-decoration-color:var(--u);text-decoration-thickness:.17em;text-underline-offset:.2em;text-decoration-skip-ink:none}
 .pm{position:absolute;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#2E2E2E}
 
 /* =========== Tema corporativo SIIE: limpio y minimalista =========== */
@@ -620,6 +621,8 @@ dialog h3{font-family:var(--head);font-weight:700;color:var(--fb-green)}
 .navsep{width:1px;height:20px;background:rgba(255,255,255,.22);margin:0 6px}
 .saved{order:-1;margin-right:10px;font-size:12px;color:rgba(255,255,255,.6)}
 .brand .bt{border-left:1px solid rgba(255,255,255,.28);padding-left:16px}
+/* Documentos al inicio de la barra lateral */
+nav.rail .docs{margin:0 10px 22px;padding-bottom:20px;border-bottom:1px solid var(--fb-line)}
 /* Contacto en el pie */
 .contact{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .contact a{display:inline-flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:14.5px;text-decoration:none}
@@ -656,7 +659,7 @@ dialog h3{font-family:var(--head);font-weight:700;color:var(--fb-green)}
     <nav class="tbtns" aria-label="Acciones del lienzo">
       <span class="saved" id="saved" aria-live="polite"></span>
       <button class="navlink hl" type="button" data-act="preview" title="Ver cómo va tu lienzo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Vista previa</span></button>
-      <button class="navlink" type="button" data-act="pdf" title="Guardar el lienzo como PDF"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg><span>PDF</span></button>
+      <button class="navlink" type="button" data-act="pdf" title="Descargar el lienzo en PDF"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg><span>PDF</span></button>
       <button class="navlink" type="button" data-go="7" title="Ir a guardar o enviar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span id="topSend">Guardar</span></button>
       <span class="navsep" aria-hidden="true"></span>
       <button class="navlink soft" type="button" data-act="reset" title="Borrar todos los datos del lienzo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Reiniciar</span></button>
@@ -666,12 +669,12 @@ dialog h3{font-family:var(--head);font-weight:700;color:var(--fb-green)}
 
 <div class="app">
   <nav class="rail" aria-label="Pasos para completar el lienzo">
-    <div class="meter" title="Casillas del lienzo con respuesta"><div class="mrow"><span>Tu lienzo</span><b id="mtxt">0 de 17 casillas</b></div><div class="bar"><i id="mbar"></i></div></div>
-    <ol id="steps"></ol>
-    <div class="railnote">Tus respuestas se guardan solas en este navegador. Abre la <b>vista previa</b> cuando quieras para ver cómo va tu lienzo.</div>
     <div class="docs"><div class="dt">Documentos originales</div>
       <a class="doc" id="docPlantilla" target="_blank" rel="noopener">Plantilla FMBC v2.1 (PDF)</a>
       <a class="doc" id="docGuia" target="_blank" rel="noopener">Guía interactiva (PDF, inglés)</a></div>
+    <div class="meter" title="Casillas del lienzo con respuesta"><div class="mrow"><span>Tu lienzo</span><b id="mtxt">0 de 17 casillas</b></div><div class="bar"><i id="mbar"></i></div></div>
+    <ol id="steps"></ol>
+    <div class="railnote">Tus respuestas se guardan solas en este navegador. Abre la <b>vista previa</b> cuando quieras para ver cómo va tu lienzo.</div>
   </nav>
   <main id="main"></main>
 </div>
@@ -692,7 +695,7 @@ dialog h3{font-family:var(--head);font-weight:700;color:var(--fb-green)}
     <strong>Vista previa del lienzo</strong><span>Se actualiza mientras escribes · toca una casilla para editarla</span>
     <span class="sp"></span>
     <button class="btn alt" type="button" id="pvFit">Tamaño real</button>
-    <button class="btn alt" type="button" id="pvPrint">Guardar PDF</button>
+    <button class="btn alt" type="button" id="pvPrint">Descargar PDF</button>
     <button class="btn" type="button" id="pvClose">Cerrar</button>
   </div>
   <div class="pvscroll" id="pvscroll"><div class="pvfit" id="pvfit"><div class="poster" id="poster"></div></div></div>
@@ -819,7 +822,10 @@ const actor=id=>state.actors.find(a=>a.id===id);
 const isSH=a=>!!L(a.role);
 const named=()=>state.actors.filter(a=>L(a.name));
 function withColors(list){list.forEach(a=>{if(!Number.isInteger(a.c))a.c=nextColor(list.filter(x=>Number.isInteger(x.c)))});return list}
-const byName=n=>{n=L(n).toLowerCase();return n?state.actors.find(a=>L(a.name).toLowerCase()===n):null};
+/* Grupos de interés de un actor: lo escrito en su campo de rol, separado por comas o punto y coma */
+const shNames=a=>L(a.role).split(/[;,]/).map(x=>L(x)).filter(Boolean);
+/* Busca el actor por su nombre o por el de uno de sus grupos de interés (mismo color) */
+const byName=n=>{n=L(n).toLowerCase();if(!n)return null;return state.actors.find(a=>L(a.name).toLowerCase()===n)||state.actors.find(a=>shNames(a).some(x=>x.toLowerCase()===n))||null};
 
 /* ---------------- Contenido de cada casilla (derivado) ---------------- */
 function derive(){
@@ -918,7 +924,7 @@ function build(){
 
   /* 2 · Grupos de interés */
   h+=`<section class="sec" id="sec-grupos">${head(2,'Perspectiva Personas · Contexto social','Un actor se convierte en grupo de interés cuando asume un rol en tu negocio. Escribe el rol de cada actor de tu lista; luego define las relaciones y los canales con tus grupos de interés.')}
-    ${card('grupos','cream',`<p class="muted small" style="margin:0 0 8px">Deja el rol vacío si el actor no es (aún) un grupo de interés.</p><div class="alist2" id="rolesList"></div>`)}
+    ${card('grupos','cream',`<p class="muted small" style="margin:0 0 8px">Al lado de cada actor escribe el grupo de interés concreto o su rol (ej.: Gobierno → DIAN). Separa varios con comas. Déjalo vacío si el actor no es (aún) un grupo de interés.</p><div class="alist2" id="rolesList"></div>`)}
     <div class="grid" style="margin-top:16px">
       ${box('relaciones','cream','sh','Una línea por grupo de interés. Ej.: Clientes: los conseguimos con degustaciones y los mantenemos con suscripción')}
       ${box('canales','cream','sh','Una línea por grupo de interés. Ej.: Clientes: WhatsApp, app y entrega en bicicleta')}
@@ -962,7 +968,7 @@ function build(){
       ${card('beneficios','cream',triF('ben'))}
       ${card('costos','cream',triF('cos'))}
     </div>
-    <div class="sim"><label class="f">Clientes<input type="number" min="0" data-path="sim.a"></label><span class="op">×</span><label class="f">Compras al mes<input type="number" min="0" data-path="sim.b"></label><span class="op">×</span><label class="f">Precio ($)<input type="number" min="0" data-path="sim.c"></label><span class="op">=</span><output id="simOut" aria-live="polite">$0 al mes</output></div>
+    <div class="sim"><label class="f">Clientes<input type="text" inputmode="numeric" data-num="int" data-path="sim.a" placeholder="0"></label><span class="op">×</span><label class="f">Compras al mes<input type="text" inputmode="numeric" data-num="int" data-path="sim.b" placeholder="0"></label><span class="op">×</span><label class="f">Precio<input type="text" inputmode="numeric" data-num="money" data-path="sim.c" placeholder="$0"></label><span class="op">=</span><output id="simOut" aria-live="polite">$0 al mes</output></div>
     <p class="muted small">Simulador rápido de ingresos para revisar si los beneficios económicos son realistas a la fecha del modelo.</p>
     ${nav(6)}</section>`;
 
@@ -984,11 +990,11 @@ function build(){
       <p>Con un clic tu lienzo queda guardado en la base de datos del programa. Cada envío se guarda como una copia nueva con fecha y hora: puedes seguir mejorándolo y volver a enviarlo. Te recomendamos guardar también el PDF.</p>
       <div class="actions">
         <button class="btn gold big" type="button" data-act="send" id="sendBtn">Enviar mi FMBC</button>
-        <button class="btn alt" type="button" data-act="pdf">Guardar PDF</button>
+        <button class="btn alt" type="button" data-act="pdf">Descargar PDF</button>
       </div>`:`<h3>Guardar mi FMBC</h3>
-      <p>Estás usando la versión sin conexión. Guarda tu lienzo como PDF (en la ventana de impresión elige “Guardar como PDF”) y descarga la copia .json si quieres seguir editándolo después.</p>
+      <p>Estás usando la versión sin conexión. Descarga tu lienzo en PDF y descarga la copia .json si quieres seguir editándolo después.</p>
       <div class="actions">
-        <button class="btn gold big" type="button" data-act="pdf">Guardar PDF</button>
+        <button class="btn gold big" type="button" data-act="pdf">Descargar PDF</button>
         <button class="btn alt" type="button" data-act="dlJson">Descargar copia (.json)</button>
       </div>`}
     </div>
@@ -1022,7 +1028,7 @@ function renderActors(){
 function renderRoles(){
   const A=named();
   $('rolesList').innerHTML=A.length?A.map((a,i)=>`<div class="grow ${isSH(a)?'sh':''}"><span class="anum" style="background:${colorOf(a)}">${i+1}</span><b>${esc(a.name)}</b>
-    <input type="text" data-actor="${a.id}" data-af="role" value="${esc(a.role)}" placeholder="Rol en tu negocio (ej.: Cliente, Proveedor)" aria-label="Rol de ${esc(a.name)}"></div>`).join(''):noActors();
+    <input type="text" data-actor="${a.id}" data-af="role" value="${esc(a.role)}" placeholder="Grupo de interés o rol (ej.: DIAN, Clientes)" aria-label="Grupo de interés de ${esc(a.name)}"></div>`).join(''):noActors();
 }
 /* Ayudas: un botón por actor (o por grupo de interés) que agrega "Nombre: " a la casilla.
    Se marca con ✓ cuando la casilla ya tiene una línea para ese actor. */
@@ -1030,17 +1036,18 @@ const reEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 function renderHelpers(){
   document.querySelectorAll('[data-helpers]').forEach(h=>{
     const key=h.dataset.helpers, sh=h.dataset.set==='sh';
-    const list=named().filter(a=>!sh||isSH(a));
+    /* Actores (necesidades, co-destrucción) o grupos de interés (relaciones, canales, co-creación) */
+    const list=sh?named().filter(isSH).flatMap(a=>shNames(a).map(n=>({a,n}))):named().map(a=>({a,n:L(a.name)}));
     const txt=L(state.f[key]).toLowerCase().split('\n').map(s=>s.trim());
-    if(!list.length){h.innerHTML=`<span class="hnone">${sh?'Cuando escribas roles en “Grupos de interés”, aquí aparecerán como ayuda.':'Cuando escribas actores, aquí aparecerán como ayuda.'}</span>`;return;}
-    h.innerHTML=`<span class="glab">${sh?'Tus grupos de interés:':'Tus actores:'}</span>`+list.map(a=>{const n=L(a.name);const re=new RegExp('^'+reEsc(n.toLowerCase())+'\\s*:');const used=txt.some(l=>re.test(l));const done=txt.some(l=>re.test(l)&&L(l.replace(re,'')));return `<button type="button" class="hchip ${done?'done':''}" ${used?'disabled':''} data-add="${esc(n)}: " data-target="p:f.${key}" title="${used?'Ya hay una línea para este actor':'Agregar una línea para '+esc(n)}"><i style="background:${colorOf(a)}"></i>${esc(n)}</button>`}).join('');
+    if(!list.length){h.innerHTML=`<span class="hnone">${sh?'Cuando escribas tus grupos de interés en el paso anterior, aquí aparecerán como ayuda.':'Cuando escribas actores, aquí aparecerán como ayuda.'}</span>`;return;}
+    h.innerHTML=`<span class="glab">${sh?'Tus grupos de interés:':'Tus actores:'}</span>`+list.map(({a,n})=>{const re=new RegExp('^'+reEsc(n.toLowerCase())+'\\s*:');const used=txt.some(l=>re.test(l));const done=txt.some(l=>re.test(l)&&L(l.replace(re,'')));return `<button type="button" class="hchip ${done?'done':''}" ${used?'disabled':''} data-add="${esc(n)}: " data-target="p:f.${key}" title="${used?'Ya hay una línea para '+esc(n):'Agregar una línea para '+esc(n)}"><i style="background:${colorOf(a)}"></i>${esc(n)}</button>`}).join('');
   });
 }
 function renderProds(){
   $('prodList').innerHTML=state.productos.map((p,i)=>`<div class="prow">
     <input type="text" data-prod="${i}" data-pf="n" value="${esc(p.n)}" placeholder="Ej.: Canasta semanal por suscripción" aria-label="Producto o servicio ${i+1}">
     <input class="pp" type="text" data-prod="${i}" data-pf="para" value="${esc(p.para)}" placeholder="Ej.: Oficinistas" aria-label="Para quién">
-    <input class="pr" type="text" data-prod="${i}" data-pf="precio" value="${esc(p.precio)}" placeholder="Ej.: $60.000/semana" aria-label="Precio">
+    <input class="pr" type="text" data-prod="${i}" data-pf="precio" data-num="soft" value="${esc(fmtSoft(p.precio))}" placeholder="Ej.: $60.000" aria-label="Precio o aporte">
     <button type="button" class="icon" data-act="delProd" data-i="${i}" aria-label="Quitar fila"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>`).join('');
 }
 function renderDyn(){
@@ -1056,10 +1063,27 @@ function addActor(name){
 }
 
 /* ---------------- Rellenar campos estáticos ---------------- */
+/* ---------- Formato de números ----------
+   int: 1.250   money: $60.000   soft: $60.000 si es solo número; si tiene texto ("Incluida") se deja igual.
+   En todos se quitan los ceros a la izquierda. */
+const digits=v=>String(v??'').replace(/\D/g,'').replace(/^0+(?=\d)/,'');
+const thousands=d=>d?Number(d).toLocaleString('es-CO'):'';
+const hasWords=v=>/[A-Za-zÁÉÍÓÚáéíóúÑñ]/.test(String(v??''));
+function fmtNum(kind,v){
+  if(kind==='soft'&&hasWords(v))return String(v).replace(/(^|[^\d.,])0+(?=\d)/g,'$1');
+  const d=digits(v); if(!d)return '';
+  return (kind==='int'?'':'$')+thousands(d);
+}
+const fmtSoft=v=>fmtNum('soft',v);
+function numInput(t){
+  const kind=t.dataset.num, before=t.value, f=fmtNum(kind,before);
+  if(f!==before){const fromEnd=before.length-t.selectionEnd;t.value=f;const pos=Math.max(0,f.length-fromEnd);try{t.setSelectionRange(pos,pos);}catch(e){}}
+  return kind==='soft'?f:digits(f);
+}
 function fill(){
   document.querySelectorAll('[data-path]').forEach(i=>{
     const v=getP(i.dataset.path);
-    if(i.type==='radio')i.checked=v===i.value; else i.value=v??'';
+    if(i.type==='radio')i.checked=v===i.value; else i.value=i.dataset.num?fmtNum(i.dataset.num,v):(v??'');
   });
   document.querySelectorAll('[data-check]').forEach(c=>{c.checked=!!state.checks[+c.dataset.check]});
   renderDyn(); refresh();
@@ -1085,7 +1109,7 @@ function refresh(){
     dot.classList.toggle('done',done); if(done)dot.innerHTML='<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'; else dot.textContent=String(i+1);
     if(bx.length)$('ss'+i).textContent=bx.filter(b=>D[b[0]].length).length+' de '+bx.length+' casillas';
   });
-  const o=$('simOut'); if(o)o.textContent=money((+state.sim.a||0)*(+state.sim.b||0)*(+state.sim.c||0))+' al mes';
+  const o=$('simOut'); if(o)o.textContent=money((+digits(state.sim.a)||0)*(+digits(state.sim.b)||0)*(+digits(state.sim.c)||0))+' al mes';
   renderMinimap();
   const ov=$('overview'); if(ov)ov.innerHTML=BOXES.map(b=>`<button type="button" class="ov ${D[b[0]].length?'ok':''}" data-jump="${b[0]}"><b>${b[1]}</b><small>${D[b[0]].length?'Con respuesta':'Pendiente'}</small></button>`).join('');
   const first=k=>{const x=D[k][0];if(!x)return '<span class="empty2">[falta]</span>';const t=((x.who?x.who+': ':'')+L(x.text)).split('\n')[0].replace(/[.;:,\s]+$/,'');return `<em>${esc(t)}</em>`};
@@ -1237,11 +1261,53 @@ function dialog(html,actions){
 }
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2600);}
 
-/* ---------------- Guardar PDF ---------------- */
-function savePdf(){
-  if($('pv').hidden)openPreview(); else renderPoster();
+/* ---------------- Descargar PDF ----------------
+   Genera el archivo en el navegador y lo descarga directamente (sin ventana de impresión).
+   Las librerías se cargan solo al pulsar el botón. Si no hay internet, se usa la impresión. */
+const PDF_LIBS=['https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js','https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'];
+function loadScript(src){
+  return new Promise((res,rej)=>{
+    const old=document.querySelector(`script[data-src="${src}"]`);
+    if(old){if(old.dataset.ok)res();else{old.addEventListener('load',res);old.addEventListener('error',()=>rej(new Error('red')));}return;}
+    const sc=document.createElement('script');sc.src=src;sc.dataset.src=src;sc.crossOrigin='anonymous';
+    sc.onload=()=>{sc.dataset.ok='1';res();};sc.onerror=()=>{sc.remove();rej(new Error('red'));};
+    document.head.appendChild(sc);
+  });
+}
+function printFallback(){
   const t=document.title; document.title='FMBC - '+(L(state.meta.para)||'lienzo');
-  setTimeout(()=>{window.print();document.title=t;},250);
+  setTimeout(()=>{window.print();document.title=t;},300);
+}
+let pdfBusy=false;
+async function savePdf(){
+  if(pdfBusy)return; pdfBusy=true;
+  if($('pv').hidden)openPreview(); else renderPoster();
+  const btns=[...document.querySelectorAll('[data-act="pdf"],#pvPrint')]; btns.forEach(b=>b.setAttribute('aria-busy','true'));
+  toast('Generando el PDF…');
+  let holder=null;
+  try{
+    await Promise.all(PDF_LIBS.map(loadScript));
+    if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+    const src=$('poster'), W=1500, H=Math.round(src.offsetHeight);
+    holder=document.createElement('div');
+    holder.style.cssText='position:fixed;left:-30000px;top:0;width:1500px;pointer-events:none';
+    const clone=src.cloneNode(true); clone.removeAttribute('id'); clone.style.transform='none';
+    holder.appendChild(clone); document.body.appendChild(holder);
+    const canvas=await window.html2canvas(clone,{scale:2.2,backgroundColor:'#ffffff',logging:false,width:W,height:H,windowWidth:1600});
+    const {jsPDF}=window.jspdf, pw=W*0.75, ph=H*0.75;
+    const pdf=new jsPDF({orientation:'landscape',unit:'pt',format:[pw,ph],compress:true});
+    pdf.addImage(canvas.toDataURL('image/jpeg',0.93),'JPEG',0,0,pw,ph,undefined,'FAST');
+    pdf.setProperties({title:'Flourishing Business Canvas · '+(L(state.meta.para)||'lienzo'),author:L(state.meta.por),creator:'SIIE · Universidad EAFIT'});
+    pdf.save('FMBC-'+slug()+'.pdf');
+    toast('PDF descargado.');
+  }catch(e){
+    toast('No se pudo crear el PDF aquí (¿sin internet?). Se abrirá la impresión: elige “Guardar como PDF”.');
+    printFallback();
+  }finally{
+    if(holder)holder.remove();
+    btns.forEach(b=>b.removeAttribute('aria-busy'));
+    pdfBusy=false;
+  }
 }
 
 /* ---------------- Enviar a la base de datos (solo online) ---------------- */
@@ -1258,7 +1324,7 @@ async function sendOnline(){
     const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fmbc:exportObj(),markdown:markdown(),casillas:filled,website:''})});
     let r={}; try{r=await res.json();}catch(e){}
     if(!res.ok||!r.ok)throw new Error(r.error||('el servidor respondió '+res.status));
-    dialog(`<h3>¡FMBC recibido! 🌱</h3><p>Tu lienzo quedó guardado con el código <b>#${esc(r.id)}</b>. Anótalo por si te lo piden.</p><p class="small muted">Puedes seguir editando y volver a enviarlo: cada envío queda como una copia nueva.</p>`,[{t:'Guardar PDF',cls:'gold',fn:savePdf},{t:'Cerrar',cls:'alt'}]);
+    dialog(`<h3>¡FMBC recibido! 🌱</h3><p>Tu lienzo quedó guardado con el código <b>#${esc(r.id)}</b>. Anótalo por si te lo piden.</p><p class="small muted">Puedes seguir editando y volver a enviarlo: cada envío queda como una copia nueva.</p>`,[{t:'Descargar PDF',cls:'gold',fn:savePdf},{t:'Cerrar',cls:'alt'}]);
   }catch(e){
     dialog(`<h3>No se pudo enviar</h3><p>${esc(e.message||e)}. Revisa tu conexión e inténtalo de nuevo. Tu trabajo sigue guardado en este navegador.</p><p class="small muted">Si el problema continúa, descarga la copia .json y envíala a la coordinación.</p>`,[{t:'Intentar de nuevo',cls:'gold',fn:()=>setTimeout(sendOnline,50)},{t:'Descargar .json',cls:'alt',keep:true,fn:dlJson},{t:'Cerrar',cls:'alt'}]);
   }finally{btn.disabled=false;btn.textContent='Enviar mi FMBC';}
@@ -1303,6 +1369,22 @@ function example(){
    cambian a "WWF: ..." y conservan su color. */
 const lastName={};
 const PEOPLE_KEYS=['necesidades','relaciones','canales','cocreacion','codestruccion'];
+function renameText(from,to){
+  if(!from||!to||from===to)return;
+  const re=new RegExp('^([ \\t]*)'+reEsc(from)+'([ \\t]*:)','gim');
+  PEOPLE_KEYS.forEach(k=>{
+    const v=state.f[k]; if(!v)return;
+    const nv=v.replace(re,(m0,sp,colon)=>sp+to+colon);
+    if(nv!==v){state.f[k]=nv;const el=document.querySelector(`[data-path="f.${k}"]`);if(el)el.value=nv;}
+  });
+}
+const lastRole={};
+function renameRole(a,newRole){
+  const prev=(a.id in lastRole)?lastRole[a.id]:shNames(a), next=L(newRole).split(/[;,]/).map(x=>L(x)).filter(Boolean);
+  lastRole[a.id]=next;
+  /* solo cuando cambia un único nombre en la misma posición */
+  if(prev.length&&prev.length===next.length){prev.forEach((f,i)=>{if(f!==next[i])renameText(f,next[i]);});}
+}
 function renameLines(a,newName){
   const from=(a.id in lastName)?lastName[a.id]:L(a.name), to=L(newName);
   if(!to){lastName[a.id]=from;return;}   // nombre vacío: se recuerda el anterior
@@ -1380,9 +1462,10 @@ function wire(){
   });
   document.addEventListener('input',e=>{
     const t=e.target;
+    if(t.dataset.num&&t.dataset.path){setP(t.dataset.path,numInput(t));onChange();return;}
     if(t.dataset.path&&t.type!=='radio'){setP(t.dataset.path,t.value);onChange();return;}
-    if(t.dataset.actor){const a=actor(t.dataset.actor);if(a){if(t.dataset.af==='name')renameLines(a,t.value);a[t.dataset.af]=t.value;if(t.dataset.af==='role'){const r=t.closest('.grow');if(r)r.classList.toggle('sh',isSH(a));}onChange();}return;}
-    if(t.dataset.prod!==undefined){const p=state.productos[+t.dataset.prod];if(p){p[t.dataset.pf]=t.value;onChange();}return;}
+    if(t.dataset.actor){const a=actor(t.dataset.actor);if(a){if(t.dataset.af==='name')renameLines(a,t.value);if(t.dataset.af==='role')renameRole(a,t.value);a[t.dataset.af]=t.value;if(t.dataset.af==='role'){const r=t.closest('.grow');if(r)r.classList.toggle('sh',isSH(a));}onChange();}return;}
+    if(t.dataset.prod!==undefined){const p=state.productos[+t.dataset.prod];if(p){p[t.dataset.pf]=t.dataset.num?numInput(t):t.value;onChange();}return;}
   });
   document.addEventListener('change',e=>{
     const t=e.target;
