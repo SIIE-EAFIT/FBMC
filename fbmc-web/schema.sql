@@ -17,3 +17,27 @@ CREATE TABLE IF NOT EXISTS fbmc (
   publico       INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_fbmc_creado ON fbmc (creado);
+
+-- Salas para llenar un lienzo en vivo con el equipo.
+-- Si tu base de datos ya existía, ejecuta solo desde aquí hasta el final (una vez).
+CREATE TABLE IF NOT EXISTS sala (
+  id           TEXT    PRIMARY KEY,
+  creado       TEXT    NOT NULL DEFAULT (datetime('now')),
+  actualizado  TEXT,
+  v            INTEGER NOT NULL DEFAULT 0,
+  estado       TEXT    NOT NULL
+);
+CREATE TABLE IF NOT EXISTS sala_cambio (
+  sala  TEXT    NOT NULL,
+  v     INTEGER NOT NULL,
+  k     TEXT    NOT NULL,
+  val   TEXT,
+  c     TEXT,
+  PRIMARY KEY (sala, v)
+);
+CREATE TABLE IF NOT EXISTS sala_presencia (
+  sala   TEXT    NOT NULL,
+  c      TEXT    NOT NULL,
+  visto  INTEGER NOT NULL,
+  PRIMARY KEY (sala, c)
+);
